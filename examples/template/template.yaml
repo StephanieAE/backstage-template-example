@@ -2,38 +2,185 @@ apiVersion: scaffolder.backstage.io/v1beta3
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
 kind: Template
 metadata:
-  name: example-nodejs-template
-  title: Example Node.js Template
-  description: An example template for the scaffolder that creates a simple Node.js service
+  name: example-application-developer-workbench
+  title: Application Developer Workbench
+  description: |
+    The App Dev Workbench is a self-service framework empowering researchers and developers to rapidly build, deploy, and manage secure, compliant apps across cloud and on-prem environments.
+
+    **Details what this template will do:**
+    - You start by entering the app details  
+    - Scaffolded project using approved, secure templates  
+    - It sets up pipelines with built-in governance & testing  
+    - Push code to trigger automated build & deployment
 spec:
-  owner: user:guest
+  owner: imec-platform/maintainers
   type: service
 
   # These parameters are used to generate the input form in the frontend, and are
   # used to gather input data for the execution of the template.
   parameters:
-    - title: Fill in some steps
+    - title: Application Details
       required:
         - name
+        - language
+        - owner
       properties:
         name:
-          title: Name
+          title: Name repository
           type: string
-          description: Unique name of the component
+          description: Name of the repository e.g. 'rnd3'
           ui:autofocus: true
           ui:options:
             rows: 5
-    - title: Choose a location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
+        owner: 
+          title: Owner
           type: string
-          ui:field: RepoUrlPicker
+          description: Owner of the repository
+          enum:
+            - imec-platform/maintainers
+          ui:order:
+            - owner
           ui:options:
-            allowedHosts:
-              - github.com
+            owner:
+              ui:widget: select
+            
+        language:
+          title: Programming Language
+          type: string
+          default: Python
+          description: Choose the programming language for the application
+          enum:
+            - Python
+            - Typescript
+            - .NET
+          ui:order:
+            - language
+          ui:options:
+            ui:widget: select
+            
+      dependencies:
+        language:
+          oneOf:
+            - properties:
+                language:
+                  enum:
+                    - Typescript
+                framework:
+                  type: string
+                  title: Framework
+                  enum:
+                    - React
+                  default: React
+              required:
+                - framework
+            - properties:
+                language:
+                  enum:
+                    - Python
+                framework:
+                  type: string
+                  title: Framework
+                  enum:
+                    - None
+                    - Dash
+                    - Flask
+                    - Streamlit
+                  default: None
+              required:
+                - framework
+            - properties:
+                language:
+                  enum:
+                    - .NET
+                framework:
+                  type: string
+                  title: Framework
+                  enum:
+                    - ASP .NET Core
+                  default: ASP .NET Core
+              required:
+                - framework
+
+
+    - title: Application Deployment
+      required:
+        - deploymentApplication
+        - deploymentEnvironments
+      properties:
+        deploymentApplication:
+          title: Deployment target
+          type: string
+          default: Azure Web App
+          description: Choose a what type application or platform you want to deploy
+          enum:
+            - Azure Kubernetes Service
+            - Azure Functions
+            - Azure Web App
+            - Azure Container Apps
+          ui:order:
+            - deploymentApplication
+          ui:options:
+            language:
+              ui:widget: select
+            
+        deploymentEnvironments:
+          title: Deployment Environments
+          description: Select the environments where this will be deployed. "prod" is always required.
+          type: array
+          items:
+            type: string
+            enum:
+              - dev
+              - test
+              - qa
+              - prod
+          uniqueItems: true
+          default: [prod]
+          allOf:
+            - contains:
+                const: prod
+          ui:options:
+            widget: checkboxes
+
+    - title: Additional Resources
+      properties:
+        databases:
+          title: Databases
+          type: array
+          description: Select extra databases you want to deploy with your application
+          items:
+            type: string
+            enum:
+              - Azure SQL
+              - Azure Databricks
+              - Azure PostgreSQL
+              - Azure Cosmos DB
+          ui:order:
+            - databases
+          ui:options:
+            language:
+              ui:widget: select
+        ai:
+          title: AI
+          type: array
+          description: Select extra AI services you want to deploy with your application
+          items:
+            type: string
+            enum:
+              - Azure AI Foundry
+              - Azure AI Services
+          ui:order:
+            - ai
+          ui:options:
+            language:
+              ui:widget: select
+        # repoUrl:
+        #   title: Deploy template
+        #   type: string
+        #   ui:field: RepoUrlPicker
+        #   ui:options:
+        #     allowedHosts:
+        #       - github.com
 
   # These steps are executed in the scaffolder backend, using data that we gathered
   # via the parameters above.
