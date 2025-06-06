@@ -44,9 +44,9 @@ const app = createApp({
       viewTechDoc: techdocsPlugin.routes.docRoot,
       createFromTemplate: scaffolderPlugin.routes.selectedTemplate,
     });
-    bind(apiDocsPlugin.externalRoutes, {
-      registerApi: catalogImportPlugin.routes.importPage,
-    });
+    // bind(apiDocsPlugin.externalRoutes, {
+    //   registerApi: catalogImportPlugin.routes.importPage,
+    // });
     bind(scaffolderPlugin.externalRoutes, {
       registerComponent: catalogImportPlugin.routes.importPage,
       viewTechDoc: techdocsPlugin.routes.docRoot,
@@ -80,7 +80,7 @@ const routes = (
       </TechDocsAddons>
     </Route>
     <Route path="/create" element={<ScaffolderPage />} />
-    <Route path="/api-docs" element={<ApiExplorerPage />} />
+    {/* <Route path="/api-docs" element={<ApiExplorerPage />} /> */}
     <Route
       path="/catalog-import"
       element={

@@ -58,22 +58,24 @@ const SidebarLogo = () => {
 
 export const Root = ({ children }: PropsWithChildren<{}>) => (
   <SidebarPage>
-    <Sidebar>
-      <SidebarLogo />
+    <Sidebar >
+      <div style={{backgroundColor: 'white', width: '100%'}}>
+        <SidebarLogo />
+      </div>
       <SidebarGroup label="Search" icon={<SearchIcon />} to="/search">
         <SidebarSearchModal />
       </SidebarGroup>
       <SidebarDivider />
       <SidebarGroup label="Menu" icon={<MenuIcon />}>
         {/* Global nav, not org-specific */}
-        <SidebarItem icon={HomeIcon} to="catalog" text="Home" />
+        {/* <SidebarItem icon={HomeIcon} to="catalog" text="Home" /> */}
         <MyGroupsSidebarItem
           singularTitle="My Group"
           pluralTitle="My Groups"
           icon={GroupIcon}
         />
-        <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
-        <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
+        {/* <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" /> */}
+        {/* <SidebarItem icon={LibraryBooks} to="docs" text="Docs" /> */}
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
         {/* End global nav */}
         <SidebarDivider />
