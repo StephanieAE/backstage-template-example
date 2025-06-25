@@ -2,10 +2,10 @@ apiVersion: scaffolder.backstage.io/v1beta3
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
 kind: Template
 metadata:
-  name: example-application-developer-workbench
-  title: Application Developer Workbench
+  name: example-custom-application-workbench
+  title: Custom Application Workbench
   description: |
-    The App Dev Workbench is a self-service framework empowering researchers and developers to rapidly build, deploy, and manage secure, compliant apps across cloud and on-prem environments.
+    The Custom Application Workbench is a self-service framework empowering researchers and developers to rapidly build, deploy, and manage secure, compliant apps across cloud and on-prem environments.
 
     **Details what this template will do:**
     - You start by entering the app details  
@@ -38,6 +38,7 @@ spec:
           description: Owner of the repository
           enum:
             - imec-platform/maintainers
+            - StephanieAE
           ui:order:
             - owner
           ui:options:
@@ -122,7 +123,6 @@ spec:
           ui:options:
             language:
               ui:widget: select
-            
         deploymentEnvironments:
           title: Deployment Environments
           description: Select the environments where this will be deployed. "prod" is always required.
@@ -174,13 +174,6 @@ spec:
           ui:options:
             language:
               ui:widget: select
-        # repoUrl:
-        #   title: Deploy template
-        #   type: string
-        #   ui:field: RepoUrlPicker
-        #   ui:options:
-        #     allowedHosts:
-        #       - github.com
 
   # These steps are executed in the scaffolder backend, using data that we gathered
   # via the parameters above.
@@ -190,29 +183,22 @@ spec:
       name: Fetch Base
       action: fetch:template
       input:
-        url: ./content
+        url: ./skeleton
         values:
           name: ${{ parameters.name }}
 
-    # This step publishes the contents of the working directory to GitHub.
-    # If you or your organization prefer another default branch name over 'main'
-    # you can change that here.
     - id: publish
       name: Publish
       action: publish:github
       input:
         allowedHosts: ['github.com']
-        description: This is ${{ parameters.name }}
-        repoUrl: ${{ parameters.repoUrl }}
-        defaultBranch: 'main'
+        repoUrl: github.com?owner=${{ parameters.owner }}&repo=${{ parameters.name }}
+        # Change TOKEN
+        token: ${{ config('scaffolder.github.token') }}
+        repoVisibility: public
+        defaultBranch: main
+        description: Repository Created by Demo Template
 
-    # The final step is to register our new component in the catalog.
-    - id: register
-      name: Register
-      action: catalog:register
-      input:
-        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
-        catalogInfoPath: '/catalog-info.yaml'
 
   # Outputs are displayed to the user after a successful execution of the template.
   output:

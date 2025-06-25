@@ -69,6 +69,8 @@ auth:
     guest: {}
 
 scaffolder:
+  github:
+    token: ${GITHUB_TOKEN}
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 catalog:
