@@ -7,6 +7,7 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
+require('dotenv').config();
 
 const backend = createBackend();
 
@@ -51,5 +52,6 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 
 // kubernetes
 backend.add(import('@backstage/plugin-kubernetes-backend'));
+console.log('GITHUB_TOKEN:', process.env.GITHUB_TOKEN);
 
 backend.start();

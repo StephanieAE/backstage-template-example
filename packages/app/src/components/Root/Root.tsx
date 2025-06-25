@@ -62,9 +62,9 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
       <div style={{backgroundColor: 'white', width: '100%'}}>
         <SidebarLogo />
       </div>
-      <SidebarGroup label="Search" icon={<SearchIcon />} to="/search">
+      {/* <SidebarGroup label="Search" icon={<SearchIcon />} to="/search">
         <SidebarSearchModal />
-      </SidebarGroup>
+      </SidebarGroup> */}
       <SidebarDivider />
       <SidebarGroup label="Menu" icon={<MenuIcon />}>
         {/* Global nav, not org-specific */}
